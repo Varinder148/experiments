@@ -11,7 +11,6 @@ const MemoizationExample = () => {
   });
 
   const onChange = useCallback((val, field) => {
-    console.log(val, field);
     setValue((prev) => ({ ...prev, [field]: val }));
   }, []);
 

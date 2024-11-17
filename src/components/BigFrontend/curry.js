@@ -15,8 +15,6 @@ function curry(fn) {
 
 //method 2
 
-const helper = () => {};
-
 function curry2(fn) {
   const inner = function (...args) {
     if (args.length < fn.length) {
@@ -27,7 +25,25 @@ function curry2(fn) {
   return inner;
 }
 
+// curried placeholder
+const removePlaceHolders = (args, placeholer) => {
+  return args.filter((arg) => arg !== placeholer);
+};
+
+function curry2(fn) {
+  curry2.placeholder = "$";
+  const inner = function (...args) {
+    args = removePlaceHolders(args, placeholder);
+    if (args.length < fn.length) {
+      return (...newArgs) => inner(...args, ...newArgs);
+    }
+    return fn(...args);
+  };
+  return inner;
+}
+
 const curriedJoin = curry2(join);
-curriedJoin(1, 2, 3); // '1_2_3'
-curriedJoin(1)(2, 3); // '1_2_3'
+const placeholder = curry2.placeholder;
+curriedJoin(1, placeholder, 2, 3); // '1_2_3'
+curriedJoin(1)(placeholder)(2, 3); // '1_2_3'
 curriedJoin(1, 2)(3); // '1_2_3'
